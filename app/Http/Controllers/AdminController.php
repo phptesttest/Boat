@@ -10,9 +10,39 @@ use App\common;
 
 class AdminController extends Controller
 {
+//祝福排行统计
+    public function  countwishrank(){
+        return view('admin.count.wishrank');
+    }
+
+//流量统计
+    public function countflow(){
+        return view('admin.count.flow');
+    }
+
+    public function receivesearch(){
+        return view('admin.receiver.search');
+    }
+//获赠端信息列表
+    public function receivelist(){
+        return view('admin.receiver.list');
+    }
+//送礼端信息搜索
+    public function givesearch(){
+        return view('admin.giver.search');
+    }
+
+//送礼端信息搜索,帅选，导出
+    public function givelist(){
+        return view('admin.giver.list');
+    }
+    //后台主页
+    public function index(){
+            return view('admin.index');
+    }
     //
     public function login(){
-    	return view('Admin.login');
+    	return view('admin.login');
     }
 
     //登录处理
@@ -40,7 +70,7 @@ class AdminController extends Controller
     }
     
     public function import(){
-        return view('admin.import');        
+        return view('admin.giver.import');        
     }
 
     //将execl文件导入数据库
