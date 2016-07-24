@@ -17,6 +17,7 @@ class CreateWishsTable extends Migration
             $table->increments('id');
             $table->string('orderNub');
             $table->string('toNub');
+            $table->string('fromNub');
             $table->string('time');
             $table->integer('state');
             $table->integer('type');

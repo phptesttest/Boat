@@ -38,7 +38,7 @@ class AdminController extends Controller
     }
     //后台主页
     public function index(){
-            return view('admin.index');
+        return view('admin.index');
     }
     //
     public function login(){
