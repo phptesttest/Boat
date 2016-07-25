@@ -6,11 +6,6 @@
 	}
 @endsection
 @section('content')
-<?php 
-
-    echo Session::get('admin');
-
- ?>
 	<div class="container">
     <div class="col-xs-12 col-sm-6">
         <div class="panel">

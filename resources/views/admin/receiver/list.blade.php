@@ -10,7 +10,7 @@ box-shadow:3px 3px #cccc;
     <div class="col-xs-12 col-sm-12">
         <div class="panel">
             <div class="panel-heading">
-                <h3 class="panel-title">帅选的条件</h3>
+                <h3 class="panel-title">筛选的条件</h3>
             </div>
             <div class="panel-body">
                 <table class="table">
@@ -47,23 +47,62 @@ box-shadow:3px 3px #cccc;
             <div class="panel-body">
                 <table class="table">
                     <tr>
-                                <td>
-                                <p><lable>订单编号 <span><a href="">12366</a></span></lablel>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<lable>获得祝福的时间 <span><a href="">125566</a></span></lablel>
-                                <lable>祝福类型 <span><a href="">1234</a></span></lablel>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<lable>购买数量 <span><a href="">1234466</a></span></lablel>
-                                <strong>获赠方</strong>手机号码<span><a href="">32121212 </a></span>
-                                <strong>航行状态</strong><span><a href="">待起航/航行中/已进水/已半沉</a></span>
-                                <strong><span><a href="/admin/pagelist">查看祝福详情>>> </a></span></strong></p>
-                                </td>
+                        <th>订单编号</th>
+                        <th>获赠方手机号码</th>
+                        <th>获得祝福时间</th>
+                        <th>祝福类型</th>
+                        <th>航行状态</th>
+                        <th>查看详情</th>
                     </tr>
-                     <tr>
-                                <td>
-                                <p><lable>订单编号 <span><a href="">12366</a></span></lablel>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<lable>获得祝福的时间 <span><a href="">125566</a></span></lablel>
-                                <lable>祝福类型 <span><a href="">1234</a></span></lablel>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<lable>购买数量 <span><a href="">1234466</a></span></lablel>
-                                <strong>获赠方</strong>手机号码<span><a href="">32121212 </a></span>
-                                <strong>航行状态</strong><span><a href="">待起航/航行中/已进水/已半沉</a></span>
-                                <strong><span><a href="/admin/pagelist">查看祝福详情>>> </a></span></strong></p>
-                                </td>   
-                    </tr>
+                    <?php if (count($data)==0) { ?>
+                    <p>没有记录！</p>
+                    <?php }else{ ?>                   
+                    <?php foreach ($data as $dd) { ?>
+                        <tr>
+                            <td>{{ $dd->orderNub}}</td>
+                            <td>{{ $dd->toNub}}</td>
+                            <td>{{ $dd->time}}</td>
+                            <td>
+                            <?php 
+                                switch ($dd->type) {
+                                    case '0':
+                                        echo "未发送祝福";
+                                        break;
+                                    
+                                    case '1':
+                                        echo "友谊的小船";
+                                        break;
+                                    case '2':
+                                        echo "爱情的巨轮";
+                                        break;
+                                }
+                             ?>
+                             </td>
+                            <td>
+                            <?php 
+                                switch ($dd->type) {
+                                    case '0':
+                                        echo "待起航";
+                                        break;
+                                    
+                                    case '1':
+                                        echo "航行中";
+                                        break;
+                                    case '2':
+                                        echo "已进水";
+                                        break;
+                                    case '3':
+                                        echo "快侧翻";
+                                        break;
+                                    case '5':
+                                        echo "已侧翻";
+                                        break;
+                                }
+                             ?>
+                            </td>
+                            <td><button>查看详情</button></td>
+                        </tr>              
+                    <?php } } ?>
                 </table>
                 <input type="" name="" class="btn btn-info" value="导出以上数据">
             </div>

@@ -68,7 +68,7 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">获赠端模块<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="/admin/receiver/search">获赠信息搜索</a></li>
-                        <li><a href="/admin/receiver/list">获赠信息列表/信息帅选/导出</a></li>
+                        <li><a href="/admin/receiver/list">获赠信息列表/信息筛选/导出</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -76,7 +76,7 @@
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="/admin/count/wishrank">祝福排行统计</a></li>
                         <li><a href="/admin/count/flow">流量统计</a></li>
-                        <li><a href="#">统计时效。。</a></li>
+                        <li><a href="#">统计时效</a></li>
                     </ul>
                 </li>
                 <li><a href="/admin/logout">退出</a></li>

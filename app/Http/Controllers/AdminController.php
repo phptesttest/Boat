@@ -7,43 +7,181 @@ use App\Http\Requests;
 use Request;
 use App\User;
 use Session;
+use Redirect;
 use App\common;
+use DB;
 
 class AdminController extends Controller
 {
 
     public function pagelist(){
+        $common=new common();
+        if($common->checkLogin()==0){
+            return redirect('/');
+        }
         return view('admin.pagelist');
     }
 
 //祝福排行统计
     public function  countwishrank(){
+        $common=new common();
+        if($common->checkLogin()==0){
+            return redirect('/');
+        }
         return view('admin.count.wishrank');
     }
 
-//流量统计
+    //流量统计
     public function countflow(){
+        $common=new common();
+        if($common->checkLogin()==0){
+            return redirect('/');
+        }
         return view('admin.count.flow');
     }
 
     public function receivesearch(){
-        return view('admin.receiver.search');
+        $common=new common();
+        if($common->checkLogin()==0){
+            return redirect('/');
+        }
+        $type=Request::input('type');//1为按订单编号搜索，2为按手机号码搜索
+        $msg=Request::input('msg');
+        $msg=trim($msg);
+        $data="";
+        if (!$type) {
+            # code...
+        }
+        if ($type==1) {
+            $data=DB::table('toinfos')->where('orderNub','=',$msg)
+            ->orderBy('time','desc')->get();
+            if (count($data)==0) {
+                return redirect()->back()->with('errors','没有搜索结果');   
+            }
+        }
+        if ($type==2) {
+            $data=DB::table('toinfos')->where('toNub','=',$msg)
+            ->orderBy('time','desc')->get();
+            if (count($data)==0) {
+                return redirect()->back()->with('errors','没有搜索结果');   
+            }
+        }
+        $array=[
+            'data'=>$data,
+        ];
+        return view('admin.receiver.search',$array);
     }
-//获赠端信息列表
+    //获赠端信息列表
     public function receivelist(){
-        return view('admin.receiver.list');
+        $common=new common();
+        if($common->checkLogin()==0){
+            return redirect('/');
+        }
+        //默认取出全部记录
+        /*$time=0;
+        $wish=3;
+        $data="";
+        if (Request::input('time')) {
+            $time=Request::input('time');//0表示全部时间，1表示24小时之内
+        }
+        if (Request::input('wish')) {
+            $wish=Request::input('wish');//0表示未发起祝福，1表示友谊的小船，2表示爱情的巨轮，3表示全部
+        }
+        if (Request::input('wish')==0) {
+            $wish=Request::input('wish');
+        }*/
+        //对祝福类型筛选
+       // if ($wish==3) {
+           $data=DB::table('toinfos')
+            ->orderBy('time','desc')->get();
+        /*}       
+        else{
+            $data=DB::table('toinfos')
+            ->where('type','=',$wish)
+            ->orderBy('time','desc')->get();
+        }
+        if(count($data)==0) {
+            return view('admin.receiver.list')->with('errors','没有搜索结果');   
+        }*/
+        $array=[
+            'data'=>$data,
+        ];
+        return view('admin.receiver.list',$array);
     }
-//送礼端信息搜索
+    //送礼端信息搜索
     public function givesearch(){
+        $common=new common();
+        if($common->checkLogin()==0){
+            return redirect('/');
+        }
         return view('admin.giver.search');
     }
 
-//送礼端信息搜索,帅选，导出
+    //送礼端信息搜索的处理
+    public function givesearchFun(){
+        $type=Request::input('type');//1为按订单编号搜索，2为按手机号码搜索
+        $msg=Request::input('msg');
+        $msg=trim($msg);
+        $data="";
+        if ($type==1) {
+            $data=DB::table('frominfos')->where('orderNub','=',$msg)
+            ->orderBy('time','desc')->get();
+            if (count($data)==0) {
+                return redirect()->back()->with('errors','没有搜索结果');   
+            }
+        }
+        if ($type==2) {
+            $data=DB::table('frominfos')->where('fromNub','=',$msg)
+            ->orderBy('time','desc')->get();
+            if (count($data)==0) {
+                return redirect()->back()->with('errors','没有搜索结果');   
+            }
+        }
+        $array=[
+            'data'=>$data,
+        ];
+        return view('admin.giver.search',$array);
+
+    }
+
+    //送礼端信息搜索,筛选，导出
     public function givelist(){
-        return view('admin.giver.list');
+        $common=new common();
+        if($common->checkLogin()==0){
+            return redirect('/');
+        }
+        //默认取出全部记录
+        $time=0;
+        $wish=4;
+        $data="";
+        if (Request::input('time')) {
+            $time=Request::input('time');//0表示全部时间，1表示24小时之内
+        }
+        if (Request::input('wish')) {
+            $wish=Request::input('wish');//1表示未发起祝福，2表示友谊的小船，3表示爱情的巨轮，4表示全部
+        }
+
+        //对祝福类型筛选
+        if ($wish==4) {
+           $data=DB::table('frominfos')
+            ->orderBy('time','desc')->get();
+        }       
+        else{
+            $data=DB::table('frominfos')
+            ->where('type','=',($wish-1))
+            ->orderBy('time','desc')->get();
+        }
+        $array=[
+            'data'=>$data,
+        ];
+        return view('admin.giver.list',$array);
     }
     //后台主页
     public function index(){
+        $common=new common();
+        if($common->checkLogin()==0){
+            return redirect('/');
+        }
         return view('admin.index');
     }
     //
@@ -75,13 +213,27 @@ class AdminController extends Controller
         
         return view('admin.index'); 
     }
+
+    public function logout(){
+        Session::forget('admin');
+        Session::flush();
+        return redirect('/');
+    }
     
     public function import(){
+        $common=new common();
+        if($common->checkLogin()==0){
+            return redirect('/');
+        };
         return view('admin.giver.import');        
     }
 
     //将execl文件导入数据库
     public function importFun(){
+       $common=new common();
+        if($common->checkLogin()==0){
+            return redirect('/');
+        }
 
         if (! empty ( $_FILES ['file_stu'] ['name'] )) {
             $tmp_file = $_FILES ['file_stu'] ['tmp_name'];
@@ -91,8 +243,7 @@ class AdminController extends Controller
             /*判别是不是.xls或.xlsx文件，判别是不是excel文件*/
             if (!(strtolower ( $file_type ) == "xls"||strtolower ( $file_type ) == "xlsx"))              
             {
-                echo '不是Excel文件,请重新上传';
-                exit();
+                return redirect()->back()->with('errors','不是Excel文件,请重新上传');
             }
 
             /*设置上传路径*/
@@ -104,16 +255,18 @@ class AdminController extends Controller
 
             /*是否上传成功*/
             if (!move_uploaded_file( $tmp_file, $savePath.$file_name )) {
-                echo '上传失败';
-                exit();
+                return redirect()->back()->with('errors','上传失败');
             }
             //将excel数据导入数据库
             $common=new common();
             $common->importExcel($file_name);
+            if(!@unlink($savePath.$file_name)){
+                return redirect()->back()->with('errors','文件删除失败');
+            };
 
         }else{
-            echo "文件上传失败";
-            exit();
+            return redirect()->back()->with('errors','文件上传失败');
         }
+        return redirect()->back()->with('errors','导入成功');
     }
 }
