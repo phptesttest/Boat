@@ -21,20 +21,68 @@ text-align:center;
                 <table class="table">
                     <tr>
                         <td>订单编号</td>
-                        <td>双方称呼</td>
+                        <td>赠送方称呼</td>
+                        <td>获赠方称呼</td>
                         <td>祝福等级</td>
                         <td>航行状态</td>
                         <td>航行距离</td>
                         <td>操作</td>
                     </tr>
+                    @if(count($friends)==0)
+                        <p>暂时还没有数据</p>
+                    @else
+                    <?php foreach ($friends as $friend) { ?>
                     <tr>
-                        <td>111222</td>
-                        <td>asv</td>
-                        <td>sfasf</td>
-                        <td>sffs</td>
-                        <td>fafa</td>
-                        <td><a href=""><button class="btn btn-info">查看</button></a></td>
+                        <td>{{ $friend->orderNub}}</td>
+                        <td>{{ $friend->fromname}}</td>
+                        <td>{{ $friend->toname}}</td>
+                        <td>
+                            <?php 
+                                switch ($friend->level) {
+                                    case '1':
+                                        echo "第一形态";
+                                        break;                                    
+                                    case '2':
+                                        echo "第二形态";
+                                        break;
+                                    case '3':
+                                        echo "第三形态";
+                                        break;
+                                    case '4':
+                                        echo "第四形态";
+                                        break;
+                                    case '5':
+                                        echo "终极形态";
+                                        break;
+                                }
+                            ?>
+                        </td>
+                        <td>
+                            <?php 
+                                switch ($friend->state) {
+                                    case '0':
+                                        echo "待起航";
+                                        break;                                    
+                                    case '1':
+                                        echo "航行中";
+                                        break;
+                                    case '2':
+                                        echo "已进水";
+                                        break;
+                                    case '3':
+                                        echo "快翻侧";
+                                        break;
+                                    case '5':
+                                        echo "已翻侧";
+                                        break;
+                                }
+                            ?>
+                        </td>
+                        <td>{{ $friend->distance}}</td>
+                        <td><a href="{{ asset('/admin/receiver/pagelist')}}/{{ $friend->id}}">查看详情</a></td>
                     </tr>
+                    <?php } ?>
+                    @endif
                 </table>
             </div>
         </div>
@@ -46,25 +94,71 @@ text-align:center;
             </div>
             <div class="panel-body">
                 <table class="table">
-                 <tr>
-                    <td>订单编号</td>
-                    <td>双方称呼</td>
-                    <td>祝福等级</td>
-                    <td>航行状态</td>
-                    <td>航行距离</td>
-                    <td>操作</td>
-                </tr>
-                <tr>
-                    <td>111222</td>
-                    <td>asv</td>
-                    <td>sfasf</td>
-                    <td>sffs</td>
-                    <td>fafa</td>
-                    <td><a href=""><button class="btn btn-info">查看</button></a></td>
-                </tr>
-
-
-            </table>
+                    <tr>
+                        <td>订单编号</td>
+                        <td>赠送方称呼</td>
+                        <td>获赠方称呼</td>
+                        <td>祝福等级</td>
+                        <td>航行状态</td>
+                        <td>航行距离</td>
+                        <td>操作</td>
+                    </tr>
+                    @if(count($loves)==0)
+                        <p>暂时还没有数据</p>
+                    @else
+                    <?php foreach ($loves as $love) { ?>
+                    <tr>
+                        <td>{{ $love->orderNub}}</td>
+                        <td>{{ $love->fromname}}</td>
+                        <td>{{ $love->toname}}</td>
+                        <td>
+                            <?php 
+                                switch ($love->level) {
+                                    case '1':
+                                        echo "第一形态";
+                                        break;                                    
+                                    case '2':
+                                        echo "第二形态";
+                                        break;
+                                    case '3':
+                                        echo "第三形态";
+                                        break;
+                                    case '4':
+                                        echo "第四形态";
+                                        break;
+                                    case '5':
+                                        echo "终极形态";
+                                        break;
+                                }
+                            ?>
+                        </td>
+                        <td>
+                            <?php 
+                                switch ($love->state) {
+                                    case '0':
+                                        echo "待起航";
+                                        break;                                    
+                                    case '1':
+                                        echo "航行中";
+                                        break;
+                                    case '2':
+                                        echo "已进水";
+                                        break;
+                                    case '3':
+                                        echo "快翻侧";
+                                        break;
+                                    case '5':
+                                        echo "已翻侧";
+                                        break;
+                                }
+                            ?>
+                        </td>
+                        <td>{{ $love->distance}}</td>
+                        <td><a href="{{ asset('/admin/receiver/pagelist')}}/{{ $love->id}}">查看详情</a></td>
+                    </tr>
+                    <?php } ?>
+                    @endif
+                </table>
         </div>
     </div>
 </div>

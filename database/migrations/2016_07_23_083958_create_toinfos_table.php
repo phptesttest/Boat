@@ -18,8 +18,8 @@ class CreateToinfosTable extends Migration
             $table->string('orderNub');
             $table->string('toNub');
             $table->string('time');
-            $table->integer('state');
-            $table->integer('type');
+            $table->integer('state')->default('0');
+            $table->integer('type')->default('0');
             $table->integer('wishid');
             $table->rememberToken();
             $table->timestamps();

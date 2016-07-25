@@ -44,7 +44,7 @@ box-shadow:3px 3px #cccc;
 
         	if (isset($data)) {
     	?>
-        <div class="col-xs-12 col-sm-6">
+        <div class="col-xs-12 col-sm-12">
             <div class="panel">
                 <div class="panel-heading">
                     <h3 class="panel-title">查询结果</h3>
@@ -86,30 +86,18 @@ box-shadow:3px 3px #cccc;
                             			case '2':
                             				echo "爱情的巨轮";
                             				break;
-
-
                                 	}
                                  ?>
                                  </td>
                             </tr>
                             <?php } ?>
-
                         </table>
                         </div>
-                    @endif
-                    
+                    @endif                   
                 </div>
             </div>
         <div>
-     <?php
-            
-        }
-                 
-    ?>
-
-
+     <?php  } ?>
 	</div>
-
-
 </div>
 @endsection

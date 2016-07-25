@@ -41,6 +41,8 @@ Route::group(['middleware' => ['web'],'prefix'=>'weixin'], function () {
 Route::group(['middleware' => ['web'],'prefix'=>'admin'], function () {
     //
     Route::get('/import', 'AdminController@import');
+    Route::get('/giveExport/{flag}', 'AdminController@giveExportFun');
+    Route::get('/receiveExport/{flag}', 'AdminController@receiveExportFun');
     Route::post('/import', 'AdminController@importFun');
     Route::get('/index','AdminController@index');
     Route::get('/logout','AdminController@logout');
@@ -53,13 +55,16 @@ Route::group(['middleware' => ['web'],'prefix'=>'admin'], function () {
 
     //获赠方模块
     Route::get('/receiver/list','AdminController@receivelist');
+    Route::post('/receiver/list','AdminController@receivelist');
     Route::get('receiver/search','AdminController@receivesearch');
-    Route::post('receiver/search','AdminController@receivesearch');
+    Route::post('receiver/search','AdminController@receivesearchFun');
+    
 
     //统计模块
     Route::get('/count/flow','AdminController@countflow');
     Route::get('count/wishrank','AdminController@countwishrank');
 
     //列表详情页
-    Route::get('/pagelist','AdminController@pagelist');
+    Route::get('receiver/pagelist/{id}','AdminController@pagedetail');
+
 });

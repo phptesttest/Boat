@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 use Request;
 use App\User;
+use App\wish;
 use Session;
 use Redirect;
 use App\common;
@@ -14,21 +15,25 @@ use DB;
 class AdminController extends Controller
 {
 
-    public function pagelist(){
-        $common=new common();
-        if($common->checkLogin()==0){
-            return redirect('/');
-        }
-        return view('admin.pagelist');
-    }
-
-//祝福排行统计
+    //祝福排行统计
     public function  countwishrank(){
         $common=new common();
         if($common->checkLogin()==0){
             return redirect('/');
         }
-        return view('admin.count.wishrank');
+        $friends=DB::table('wishes')->where('type','=',1)
+        ->select('orderNub','level','toname','fromname','distance','state','id')
+        ->orderBy('distance','desc')
+        ->get();
+        $loves=DB::table('wishes')->where('type','=',2)
+        ->select('orderNub','level','toname','fromname','distance','state','id')
+        ->orderBy('distance','desc')
+        ->get();
+        $array=[
+            'friends'=>$friends,
+            'loves'=>$loves,
+        ];
+        return view('admin.count.wishrank',$array);
     }
 
     //流量统计
@@ -71,6 +76,44 @@ class AdminController extends Controller
         ];
         return view('admin.receiver.search',$array);
     }
+
+    public function receivesearchFun(){
+        $type=Request::input('type');//1为按订单编号搜索，2为按手机号码搜索
+        $msg=Request::input('msg');
+        $msg=trim($msg);
+        $data="";
+        if ($type==1) {
+            $data=DB::table('toinfos')->where('orderNub','=',$msg)
+            ->orderBy('time','desc')->get();
+            if (count($data)==0) {
+                return redirect()->back()->with('errors','没有搜索结果');   
+            }
+        }
+        if ($type==2) {
+            $data=DB::table('toinfos')->where('toNub','=',$msg)
+            ->orderBy('time','desc')->get();
+            if (count($data)==0) {
+                return redirect()->back()->with('errors','没有搜索结果');   
+            }
+        }
+        $array=[
+            'data'=>$data,
+        ];
+        return view('admin.receiver.search',$array);
+    }
+
+    public function pagedetail($id){
+        $common=new common();
+        if($common->checkLogin()==0){
+            return redirect('/');
+        }
+        $detail=wish::find($id);
+        $array=[
+            'detail'=>$detail,
+        ];
+        return view('admin.receiver.pagelist',$array);
+    }
+
     //获赠端信息列表
     public function receivelist(){
         $common=new common();
@@ -78,36 +121,93 @@ class AdminController extends Controller
             return redirect('/');
         }
         //默认取出全部记录
-        /*$time=0;
-        $wish=3;
+        $time=1;
+        $state=1;
+        $wish=4;
         $data="";
         if (Request::input('time')) {
-            $time=Request::input('time');//0表示全部时间，1表示24小时之内
+            $time=Request::input('time');//1表示全部时间
         }
         if (Request::input('wish')) {
-            $wish=Request::input('wish');//0表示未发起祝福，1表示友谊的小船，2表示爱情的巨轮，3表示全部
+            $wish=Request::input('wish');//1表示未发起祝福，2表示友谊的小船，3表示爱情的巨轮，4表示全部
         }
-        if (Request::input('wish')==0) {
-            $wish=Request::input('wish');
-        }*/
+        if (Request::input('state')) {
+            $state=Request::input('state');//1表示全部，2表示待起航，3表示航行中，4表示已进水，5表示快侧翻，7表示已侧翻
+        }
         //对祝福类型筛选
-       // if ($wish==3) {
-           $data=DB::table('toinfos')
-            ->orderBy('time','desc')->get();
-        /*}       
+        if ($wish==4) {
+            if ($time==1) {
+                if ($state==1) {//全祝福类型，全时间，全状态筛选
+                    $data=DB::table('toinfos')
+                        ->orderBy('time','desc')->get();
+                }else{//全祝福类型，全时间，状态有条件筛选
+                    $data=DB::table('toinfos')
+                        ->where('state','=',($state-2))
+                        ->orderBy('time','desc')->get();
+                }
+                
+            }else{
+                if ($state==1) {//全祝福类型，时间有条件，全状态筛选
+                   $data=DB::table('toinfos')
+                        ->where('time','=',$time)
+                        ->orderBy('time','desc')->get(); 
+                }else{//全祝福类型，时间有条件，状态有条件筛选
+                   $data=DB::table('toinfos')
+                        ->where('time','=',$time)
+                        ->where('state','=',($state-2))
+                        ->orderBy('time','desc')->get(); 
+                }
+                
+            }
+           
+        }       
         else{
-            $data=DB::table('toinfos')
-            ->where('type','=',$wish)
-            ->orderBy('time','desc')->get();
+            if ($time==1) {
+                if ($state==1) {//祝福有条件，全时间，全状态筛选
+                    $data=DB::table('toinfos')
+                        ->where('type','=',($wish-1))
+                        ->orderBy('time','desc')->get();
+                }else{//祝福有条件，全时间，状态有条件筛选
+                    $data=DB::table('toinfos')
+                        ->where('type','=',($wish-1))
+                        ->where('state','=',($state-2))
+                        ->orderBy('time','desc')->get();
+                }
+                
+            }else{
+                if ($state==1) {//祝福有条件，时间有条件，全状态筛选
+                   $data=DB::table('toinfos')
+                        ->where('type','=',($wish-1))
+                        ->where('time','=',$time)
+                        ->orderBy('time','desc')->get(); 
+                }else{//祝福有条件，时间有条件，状态有条件筛选
+                   $data=DB::table('toinfos')
+                        ->where('type','=',($wish-1))
+                        ->where('time','=',$time)
+                        ->where('state','=',($state-2))
+                        ->orderBy('time','desc')->get(); 
+                }
+                
+            }
         }
         if(count($data)==0) {
-            return view('admin.receiver.list')->with('errors','没有搜索结果');   
-        }*/
+            $array=[
+                'data'=>$data,
+                'wish'=>$wish,
+                'time'=>$time,
+                'state'=>$state,
+            ];
+            return view('admin.receiver.list',$array)->with('errors','没有搜索结果');   
+        }
         $array=[
             'data'=>$data,
+            'wish'=>$wish,
+            'time'=>$time,
+            'state'=>$state,
         ];
         return view('admin.receiver.list',$array);
     }
+
     //送礼端信息搜索
     public function givesearch(){
         $common=new common();
@@ -151,11 +251,11 @@ class AdminController extends Controller
             return redirect('/');
         }
         //默认取出全部记录
-        $time=0;
+        $time=1;
         $wish=4;
         $data="";
         if (Request::input('time')) {
-            $time=Request::input('time');//0表示全部时间，1表示24小时之内
+            $time=Request::input('time');//1表示全部时间
         }
         if (Request::input('wish')) {
             $wish=Request::input('wish');//1表示未发起祝福，2表示友谊的小船，3表示爱情的巨轮，4表示全部
@@ -163,16 +263,34 @@ class AdminController extends Controller
 
         //对祝福类型筛选
         if ($wish==4) {
-           $data=DB::table('frominfos')
-            ->orderBy('time','desc')->get();
+            //对时间筛选
+            if ($time==1) {
+                $data=DB::table('frominfos')
+                ->orderBy('time','desc')->get();
+            }else{
+                $data=DB::table('frominfos')
+                ->where('time','=',$time)
+                ->orderBy('time','desc')->get();
+            }
+           
         }       
         else{
-            $data=DB::table('frominfos')
-            ->where('type','=',($wish-1))
-            ->orderBy('time','desc')->get();
+            if ($time==1) {
+                $data=DB::table('frominfos')
+                ->where('type','=',($wish-1))
+                ->orderBy('time','desc')->get();
+            }else{
+                $data=DB::table('frominfos')
+                ->where('type','=',($wish-1))
+                ->where('time','=',$time)
+                ->orderBy('time','desc')->get();
+            }
+            
         }
         $array=[
             'data'=>$data,
+            'wish'=>$wish,
+            'time'=>$time,
         ];
         return view('admin.giver.list',$array);
     }
@@ -230,7 +348,7 @@ class AdminController extends Controller
 
     //将execl文件导入数据库
     public function importFun(){
-       $common=new common();
+        $common=new common();
         if($common->checkLogin()==0){
             return redirect('/');
         }
@@ -268,5 +386,114 @@ class AdminController extends Controller
             return redirect()->back()->with('errors','文件上传失败');
         }
         return redirect()->back()->with('errors','导入成功');
+    }
+
+    //将送礼端数据库数据导出到excel
+    public function giveExportFun($flag){
+        $common=new common();
+        if($common->checkLogin()==0){
+            return redirect('/');
+        }
+        $arr=explode(",",$flag);
+        $time=$arr[0];
+        $wish=$arr[1];
+        $data="";
+        //对祝福类型筛选
+        if ($wish==4) {
+            //对时间筛选
+            if ($time==1) {
+                $data=DB::table('frominfos')
+                ->orderBy('time','desc')->get();
+            }else{
+                $data=DB::table('frominfos')
+                ->where('time','=',$time)
+                ->orderBy('time','desc')->get();
+            }
+           
+        }       
+        else{
+            if ($time==1) {
+                $data=DB::table('frominfos')
+                ->where('type','=',($wish-1))
+                ->orderBy('time','desc')->get();
+            }else{
+                $data=DB::table('frominfos')
+                ->where('type','=',($wish-1))
+                ->where('time','=',$time)
+                ->orderBy('time','desc')->get();
+            }
+            
+        }
+        $common=new common();
+        $common->giveExportExcel($data);
+        return redirect('admin/giver/list');
+    }
+    //将获赠端数据导出到excel
+    public function receiveExportFun($flag){
+        $arr=explode(",",$flag);
+        $time=$arr[0];
+        $wish=$arr[1];
+        $state=$arr[2];
+        $data="";
+        //对祝福类型筛选
+        if ($wish==4) {
+            if ($time==1) {
+                if ($state==1) {//全祝福类型，全时间，全状态筛选
+                    $data=DB::table('toinfos')
+                        ->orderBy('time','desc')->get();
+                }else{//全祝福类型，全时间，状态有条件筛选
+                    $data=DB::table('toinfos')
+                        ->where('state','=',($state-2))
+                        ->orderBy('time','desc')->get();
+                }
+                
+            }else{
+                if ($state==1) {//全祝福类型，时间有条件，全状态筛选
+                   $data=DB::table('toinfos')
+                        ->where('time','=',$time)
+                        ->orderBy('time','desc')->get(); 
+                }else{//全祝福类型，时间有条件，状态有条件筛选
+                   $data=DB::table('toinfos')
+                        ->where('time','=',$time)
+                        ->where('state','=',($state-2))
+                        ->orderBy('time','desc')->get(); 
+                }
+                
+            }
+           
+        }       
+        else{
+            if ($time==1) {
+                if ($state==1) {//祝福有条件，全时间，全状态筛选
+                    $data=DB::table('toinfos')
+                        ->where('type','=',($wish-1))
+                        ->orderBy('time','desc')->get();
+                }else{//祝福有条件，全时间，状态有条件筛选
+                    $data=DB::table('toinfos')
+                        ->where('type','=',($wish-1))
+                        ->where('state','=',($state-2))
+                        ->orderBy('time','desc')->get();
+                }
+                
+            }else{
+                if ($state==1) {//祝福有条件，时间有条件，全状态筛选
+                   $data=DB::table('toinfos')
+                        ->where('type','=',($wish-1))
+                        ->where('time','=',$time)
+                        ->orderBy('time','desc')->get(); 
+                }else{//祝福有条件，时间有条件，状态有条件筛选
+                   $data=DB::table('toinfos')
+                        ->where('type','=',($wish-1))
+                        ->where('time','=',$time)
+                        ->where('state','=',($state-2))
+                        ->orderBy('time','desc')->get(); 
+                }
+                
+            }
+        }
+        $common=new common();
+        $common->receiveExportExcel($data);
+        return redirect('admin/receiver/list');
+
     }
 }
