@@ -48,20 +48,20 @@ box-shadow:3px 3px #cccc;
                 <table class="table">
                     <tr>
                                 <td>
-                                <p><lable>订单编号 <span><a href="">12366</a></span></lablel>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<lable>获得祝福的时间 <span><a href="">125566</a></span></lablel></p>
-                                <p><lable>祝福类型 <span><a href="">1234</a></span></lablel>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<lable>购买数量 <span><a href="">1234466</a></span></lablel></p>
-                                <p><strong>获赠方</strong>手机号码<span><a href="">32121212 </a></span></p>
-                                <p><strong>航行状态</strong><span><a href="">待起航/航行中/已进水/已半沉</a></span></p>
-                                <p><strong><span><a href="">查看祝福详情>>> </a></span></strong></p>
+                                <p><lable>订单编号 <span><a href="">12366</a></span></lablel>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<lable>获得祝福的时间 <span><a href="">125566</a></span></lablel>
+                                <lable>祝福类型 <span><a href="">1234</a></span></lablel>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<lable>购买数量 <span><a href="">1234466</a></span></lablel>
+                                <strong>获赠方</strong>手机号码<span><a href="">32121212 </a></span>
+                                <strong>航行状态</strong><span><a href="">待起航/航行中/已进水/已半沉</a></span>
+                                <strong><span><a href="/admin/pagelist">查看祝福详情>>> </a></span></strong></p>
                                 </td>
                     </tr>
                      <tr>
                                 <td>
-                                <p><lable>订单编号 <span><a href="">12366</a></span></lablel>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<lable>获得祝福的时间 <span><a href="">125566</a></span></lablel></p>
-                                <p><lable>祝福类型 <span><a href="">1234</a></span></lablel>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<lable>购买数量 <span><a href="">1234466</a></span></lablel></p>
-                                <p><strong>获赠方</strong>手机号码<span><a href="">32121212 </a></span></p>
-                                <p><strong>航行状态</strong><span><a href="">待起航/航行中/已进水/已半沉</a></span></p>
-                                <p><strong><span><a href="">查看祝福详情>>> </a></span></strong></p>
+                                <p><lable>订单编号 <span><a href="">12366</a></span></lablel>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<lable>获得祝福的时间 <span><a href="">125566</a></span></lablel>
+                                <lable>祝福类型 <span><a href="">1234</a></span></lablel>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<lable>购买数量 <span><a href="">1234466</a></span></lablel>
+                                <strong>获赠方</strong>手机号码<span><a href="">32121212 </a></span>
+                                <strong>航行状态</strong><span><a href="">待起航/航行中/已进水/已半沉</a></span>
+                                <strong><span><a href="/admin/pagelist">查看祝福详情>>> </a></span></strong></p>
                                 </td>   
                     </tr>
                 </table>

@@ -7,7 +7,7 @@ box-shadow:3px 3px #cccc;
 @endsection
 @section('content')
 <div class="container">
-    <div class="col-xs-12 col-sm-6">
+    <div class="col-xs-12 col-sm-12">
         <div class="panel">
             <div class="panel-heading">
                 <h3 class="panel-title">帅选的条件</h3>
@@ -40,16 +40,16 @@ box-shadow:3px 3px #cccc;
                 <table class="table">
                     <tr>
                                 <td>
-                                <p><lable>订单编号 <span><a href="">12366</a></span></lablel>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<lable>订单时间 <span><a href="">125566</a></span></lablel></p>
-                                <p><lable>祝福类型 <span><a href="">1234</a></span></lablel>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<lable>购买数量 <span><a href="">1234466</a></span></lablel></p>
-                                <p><strong>送礼方手机号码</strong><span><a href="">32121212 </a></span></p>
+                                <p><lable>订单编号 <span><a href="">12366</a></span></lablel>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<lable>订单时间 <span><a href="">125566</a></span></lablel>
+                                <lable>祝福类型 <span><a href="">1234</a></span></lablel>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<lable>购买数量 <span><a href="">1234466</a></span></lablel>
+                                <strong>送礼方手机号码</strong><span><a href="">32121212 </a></span></p>
                                 </td>
                     </tr>
                      <tr>
                                 <td>
-                                <p><lable>订单编号 <span><a href="">12366</a></span></lablel>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<lable>订单时间 <span><a href="">125566</a></span></lablel></p>
-                                <p><lable>祝福类型 <span><a href="">1234</a></span></lablel>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<lable>购买数量 <span><a href="">1234466</a></span></lablel></p>
-                                <p><strong>送礼方手机号码</strong><span><a href="">32121212 </a></span></p>
+                                <p><lable>订单编号 <span><a href="">12366</a></span></lablel>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<lable>订单时间 <span><a href="">125566</a></span></lablel>
+                                <lable>祝福类型 <span><a href="">1234</a></span></lablel>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<lable>购买数量 <span><a href="">1234466</a></span></lablel>
+                                <strong>送礼方手机号码</strong><span><a href="">32121212 </a></span></p>
                                 </td>
                     </tr>
                 </table>
