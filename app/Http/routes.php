@@ -29,7 +29,7 @@
 Route::group(['middleware' => ['web']], function () {
     //
     Route::get('/', 'AdminController@login');
-    Route::post('/login', 'AdminController@loginDeal');
+    Route::post('/index', 'AdminController@loginDeal');
     
 });
 

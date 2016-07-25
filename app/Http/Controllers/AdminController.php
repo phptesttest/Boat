@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 use Request;
 use App\User;
+use Session;
 use App\common;
 
 class AdminController extends Controller
@@ -50,7 +51,7 @@ class AdminController extends Controller
     	$user=User::all();
     	if (count($user)==0) {
     		$user=new User();
-    		$user->username='boatfriend';
+    		$user->name='boatfriend';
     		$user->password='123456';
     		$user->save();
     		$user=User::all();
@@ -59,14 +60,15 @@ class AdminController extends Controller
     	
     	$username=Request::input('username');
     	$password=Request::input('password');
-    	if ($username!=$user[0]->username) {
+    	if ($username!=$user[0]->name) {
     		return redirect()->back()->with('errors','账号错误');
     	}
     	if ($password!=$user[0]->password) {
     		return redirect()->back()->with('errors','密码错误');
     	}
-    	echo "登录成功";
-
+        Session::put('admin','adminIn');
+        
+        return view('admin.index'); 
     }
     
     public function import(){

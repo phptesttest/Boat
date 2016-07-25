@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\PHPExcel_IOFactory; 
 use Excel;
 use App\frominfo;
+use Redirect;
 use PHPExcel_Shared_Date;
 
 class common extends Model
@@ -54,6 +55,13 @@ class common extends Model
 				}
 			}
     	});
+		public fucntion checkLogin(){
+			if (!Session::get('admin')) {
+				return redirect('/');
+			}
+		}
+	
+
 		
     }
 }
