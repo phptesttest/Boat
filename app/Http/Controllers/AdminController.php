@@ -10,6 +10,11 @@ use App\common;
 
 class AdminController extends Controller
 {
+
+    public function pagelist(){
+        return view('admin.pagelist');
+    }
+
 //祝福排行统计
     public function  countwishrank(){
         return view('admin.count.wishrank');

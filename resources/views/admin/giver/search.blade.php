@@ -7,7 +7,7 @@ box-shadow:3px 3px #cccc;
 @endsection
 @section('content')
 <div class="container">
-	<div class="col-xs-12 col-sm-6">
+	<div class="col-xs-12 col-sm-12">
 		<div class="panel">
 			<div class="panel-heading">
 				<h3 class="panel-title">信息搜索</h3>
@@ -15,12 +15,13 @@ box-shadow:3px 3px #cccc;
 			<div class="panel-body">
 				<table class="table">
 					<tr>
-					<td>请输入订单编号</td>
+					<td><lable>请选择你所搜的方式</lable>
+					<select >
+						<option>订单编号</option>
+						<option>送礼方手机号码</option>
+					</select>
+					</td>
 					<td><input type="text" name="ordernum"></td>
-					</tr>
-					<tr>
-					<td>请输入送礼方手机号码</td>
-					<td><input type="text" name="photonum"></td>
 					</tr>
 					<tr>
 					<td><input type='' class="btn btn-info"  value='确认搜索'></td>

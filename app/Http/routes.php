@@ -56,4 +56,6 @@ Route::group(['middleware' => ['web'],'prefix'=>'admin'], function () {
     Route::get('/count/flow','AdminController@countflow');
     Route::get('count/wishrank','AdminController@countwishrank');
 
+    //列表详情页
+    Route::get('/pagelist','AdminController@pagelist');
 });
