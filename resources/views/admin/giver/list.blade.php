@@ -19,14 +19,13 @@ box-shadow:3px 3px #cccc;
                     <tr>
                         <td>下单时间</td>
                         <td><input type="date" name='time'  value="0"></td>
-            
                     </tr>
                     <tr>
                         <td>祝福的类型</td>
-                        <td><input type="radio" name="wish" checked="checked" value="4">全部</td>
-                        <td><input type="radio" name="wish" value="2">友谊的小船</td>
-                        <td><input type="radio" name="wish" value="3">爱情的巨轮</td>
-                        <td><input type="radio" name="wish" value="1">未发起祝福</td>
+                        <td><input type="radio" name="wish" <?php if ($wish==4) {echo 'checked="checked"';} ?>  value="4">全部</td>
+                        <td><input type="radio" name="wish" value="2" <?php if ($wish==2) {echo 'checked="checked"';} ?>>友谊的小船</td>
+                        <td><input type="radio" name="wish" value="3" <?php if ($wish==3) {echo 'checked="checked"';} ?>>爱情的巨轮</td>
+                        <td><input type="radio" name="wish" value="1" <?php if ($wish==1) {echo 'checked="checked"';} ?>>未发起祝福</td>
                     </tr>
                     <tr>
                         <td colspan="4"><input type="submit" class="btn btn-info" value="确认筛选"></td>
@@ -76,7 +75,8 @@ box-shadow:3px 3px #cccc;
                         </tr>              
                     <?php } }?>                   
                 </table>
-                <input type="" name="" class="btn btn-info" value="导出以上数据">
+                <?php $flag=$time.','.$wish ?>
+                <a href="{{ asset('/admin/giveExport')}}/<?php echo $flag ?>">导出以上数据</a>
             </div>           
     </div>
 </div>

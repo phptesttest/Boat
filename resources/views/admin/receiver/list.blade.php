@@ -13,6 +13,8 @@ box-shadow:3px 3px #cccc;
                 <h3 class="panel-title">筛选的条件</h3>
             </div>
             <div class="panel-body">
+            <form class="form-horizontal" role="form" method="POST" action="{{ asset('/admin/receiver/list') }}">
+            <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <table class="table">
                     <tr>
                         <td>获得祝福的时间</td>
@@ -20,23 +22,25 @@ box-shadow:3px 3px #cccc;
                     </tr>
                     <tr>
                         <td>祝福的类型</td>
-                        <td><input type="radio" name="wish" checked="checked"><a href=''>全部</a></td>
-                        <td><input type="radio" name="wish"><a href=''>友谊的小船</a></td>
-                        <td><input type="radio" name="wish"><a href=''>爱情的巨轮</a></td>
-                        <td><input type="radio" name="wish"></ins><a href=''>未发送祝福</a></td>
+                        <td><input type="radio" name="wish" <?php if ($wish==4) {echo 'checked="checked"';} ?>  value="4">全部</td>
+                        <td><input type="radio" name="wish" value="2" <?php if ($wish==2) {echo 'checked="checked"';} ?>>友谊的小船</td>
+                        <td><input type="radio" name="wish" value="3" <?php if ($wish==3) {echo 'checked="checked"';} ?>>爱情的巨轮</td>
+                        <td><input type="radio" name="wish" value="1" <?php if ($wish==1) {echo 'checked="checked"';} ?>>未发起祝福</td>
                     </tr>
                     <tr>
                         <td>航行状态</td>
-                        <td><input type="radio" name="staus" checked="checked"><a href=''>全部</a></td>
-                        <td><input type="radio" name="staus"><a href=''>待起航</a></td>
-                        <td><input type="radio" name="staus"><a href=''>航行中</a></td>
-                        <td><input type="radio" name="staus"><a href=''>已进水</a></td>
-                        <td><input type="radio" name="staus"><a href=''>已半沉</a></td>
+                        <td><input type="radio" name="state" checked="checked" value="1" <?php if ($state==1) {echo 'checked="checked"';} ?>>全部</td>
+                        <td><input type="radio" name="state" value="2" <?php if ($state==2) {echo 'checked="checked"';} ?>>待起航</td>
+                        <td><input type="radio" name="state" value="3" <?php if ($state==3) {echo 'checked="checked"';} ?>>航行中</td>
+                        <td><input type="radio" name="state" value="4" <?php if ($state==4) {echo 'checked="checked"';} ?>>已进水</td>
+                        <td><input type="radio" name="state" value="5" <?php if ($state==5) {echo 'checked="checked"';} ?>>快侧翻</td>
+                        <td><input type="radio" name="state" value="7" <?php if ($state==7) {echo 'checked="checked"';} ?>>已侧翻</td>
                     </tr>
                     <tr>
-                        <td colspan="4"><input type="" name="" class="btn btn-info" value="确认帅选"></td>
+                        <td colspan="4"><input type="submit" class="btn btn-info" value="确认筛选"></td>
                     </tr>
                 </table>
+                </form>
             </div>
         </div>
         <div class="panel">
@@ -79,7 +83,7 @@ box-shadow:3px 3px #cccc;
                              </td>
                             <td>
                             <?php 
-                                switch ($dd->type) {
+                                switch ($dd->state) {
                                     case '0':
                                         echo "待起航";
                                         break;
@@ -99,11 +103,12 @@ box-shadow:3px 3px #cccc;
                                 }
                              ?>
                             </td>
-                            <td><button>查看详情</button></td>
+                            <td><a href="{{ asset('/admin/receiver/pagelist')}}/{{ $dd->wishid}}">查看详情</a></td>
                         </tr>              
                     <?php } } ?>
                 </table>
-                <input type="" name="" class="btn btn-info" value="导出以上数据">
+                <?php $flag=$time.','.$wish.','.$state ?>
+                <a href="{{ asset('/admin/receiveExport')}}/<?php echo $flag ?>">导出以上数据</a>
             </div>
             
     </div>

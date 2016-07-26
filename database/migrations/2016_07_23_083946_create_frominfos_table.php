@@ -19,7 +19,7 @@ class CreateFrominfosTable extends Migration
             $table->string('fromNub');
             $table->string('time');
             $table->string('number');
-            $table->integer('type');
+            $table->integer('type')->default('0');
             $table->rememberToken();
             $table->timestamps();
         });
