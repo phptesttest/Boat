@@ -17,9 +17,9 @@ class FromController extends Controller
 {
     
     /*
-    *功能：验证该手机是否合法，合法则放回验证码，不合法则返回错误提示
+    *功能：验证该手机是否合法，合法则返回验证码，不合法则返回错误提示
     *请求方式：post
-    *参数：phoneNub 手机号 type 验证端类型 0 表示赠送的 1表示获赠端
+    *参数：phoneNub 手机号 type 验证端类型 1表示赠送的 2表示获赠端
     *返回值类型：json
     *返回参数：$errcode 0 表示验证成功。1 表示验证失败
     *返回参数 $msg 提示信息
@@ -43,7 +43,7 @@ class FromController extends Controller
             return $json;
         }
         //验证该手机号是否有资格发起祝福，或是否有发出的祝福
-        if($type==0){
+        if($type==1){
             $phones=DB::table('frominfos')->where('fromNub','=',$phoneNub)
             ->orderBy('time','desc')->get();
             if (count($phones)==0) {
@@ -54,11 +54,10 @@ class FromController extends Controller
                     'msg'=>$msg,
                 );
                 $json=json_encode($array);
-
                 return $json;       
             }
         }
-        else if($type==1) {
+        else if($type==2) {
             $phones=DB::table('toinfos')->where('toNub','=',$phoneNub)
             ->orderBy('time','desc')->get();
             if (count($phones)==0) {
@@ -140,6 +139,7 @@ class FromController extends Controller
     *返回参数 $msg 提示信息
     */
     public function validateFun(){
+        date_default_timezone_set('PRC');
         $phoneNub=Request::input('phoneNub');
         $code=Request::input('code');
         $errcode="";
@@ -183,13 +183,13 @@ class FromController extends Controller
     /*
     *功能：获取祝福列表
     *请求方式：post
-    *参数：phoneNub 手机号 type 验证端类型 0 表示赠送端 1表示获赠端
+    *参数：phoneNub 手机号 type 验证端类型 1表示赠送端 2表示获赠端
     *返回值类型：json
     *返回参数：$errcode 0 表示正确。1 表示错误
     *返回参数: $msg  提示信息
     *返回参数: $conut 已发出（接收到）祝福总条数
     *返回参数: $changeNub 有资格发起祝福的条数
-    *返回参数: $wishs 发出(接收到)祝福详情 
+    *返回参数: $wishes 发出(接收到)祝福详情 
     *返回参数: $changes 有资格发出的祝福详情（下单时间，数量） 
     */
     public function getLists(){
@@ -201,10 +201,11 @@ class FromController extends Controller
         $changeNub="";
         $arrchanges="";
         
-        if ($type==0) {//赠送端
+        if ($type==1) {//赠送端
             //$changeNub 有资格发起祝福的条数
             $changes=DB::table('frominfos')->where('fromNub','=',$phoneNub)
             ->where('type','=','0')
+            ->select('time','number')
             ->orderBy('time','desc')->get();
             $changeNub=count($changes);
             $arrchanges=array();
@@ -213,8 +214,9 @@ class FromController extends Controller
                 $arrchanges[]=array('time'=>$value->time,'number'=>$value->number);
             }
             //祝福总条数
-            $lists=DB::table('wishs')->where('fromNub','=',$phoneNub)
+            $lists=DB::table('wishes')->where('fromNub','=',$phoneNub)
             ->where('type','>','0')
+            ->select('number','fromname','toname','time','type',)
             ->orderBy('time','desc')->get();
             $count=count($lists);
             $array=array();
@@ -224,17 +226,17 @@ class FromController extends Controller
             }
             
             $errcode=0;           
-            
         }
-        if ($type==1) {//获赠方获取祝福详情
+        if ($type==2) {//获赠方获取祝福详情
             //获取收到祝福列表
-            $lists=DB::table('wishs')->where('toNub','=',$phoneNub)
+            $lists=DB::table('wishes')->where('toNub','=',$phoneNub)
+            ->select('fromname','toname','time','type','id','state');
             ->orderBy('time','desc')->get();
             $count=count($lists);
             $array=array();
             //获取发出祝福详情
             foreach ($lists as $key => $value) {
-                $array[]=array('fromname'=>$value->fromname,'toname'=>$value->toname,'time'=>$value->time,'number'=>$value->number,'type'=>$value->type);
+                $array[]=array('fromname'=>$value->fromname,'toname'=>$value->toname,'time'=>$value->time,'wishId'=>$value->id,'type'=>$value->type,'state'=>$value->state);
             }
             
             $errcode=0;
@@ -245,7 +247,7 @@ class FromController extends Controller
             'msg'=>$msg,
             'count'=>$count,
             'changeNub'=>$changeNub,
-            'wishs'=>$array,
+            'wishes'=>$array,
             'changes'=>$arrchanges
         );
         $json=json_encode($arr);
