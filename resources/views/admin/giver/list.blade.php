@@ -18,8 +18,8 @@ box-shadow:3px 3px #cccc;
                 <table class="table">
                     <tr>
                         <td>下单时间</td>
-                        <td><input type="radio" name='time' checked="checked" value="0">全部时间</td>
-                        <td><input type="radio" name="time" value="1">24小时之内</td>
+                        <td><input type="date" name='time'  value="0"></td>
+            
                     </tr>
                     <tr>
                         <td>祝福的类型</td>

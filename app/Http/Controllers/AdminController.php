@@ -211,7 +211,8 @@ class AdminController extends Controller
     	}
         Session::put('admin','adminIn');
         
-        return view('admin.index'); 
+        //return view('admin.index'); 
+        return redirect('/admin/index');
     }
 
     public function logout(){

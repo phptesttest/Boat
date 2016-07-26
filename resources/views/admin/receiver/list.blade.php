@@ -16,8 +16,7 @@ box-shadow:3px 3px #cccc;
                 <table class="table">
                     <tr>
                         <td>获得祝福的时间</td>
-                        <td><input type="radio" name='time' name="" checked="checked"><a href=''>全部时间</a></td>
-                        <td><input type="radio" name="time"><a href=''>24小时之内</a></td>
+                        <td><input type="date" name='time'  value="0" ></td>
                     </tr>
                     <tr>
                         <td>祝福的类型</td>
