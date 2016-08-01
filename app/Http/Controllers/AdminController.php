@@ -15,6 +15,16 @@ use DB;
 class AdminController extends Controller
 {
 
+
+    //测试
+    public function test(){
+        /*$direct=urlencode('http://moongame.hoomdo.com/test.html?wishId=1');
+        $appid='wx079deb492ee1955c';
+        $url="https://open.weixin.qq.com/connect/oauth2/authorize?appid=".$appid."&redirect_uri=".$direct."&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect";
+        echo $url;*/
+        //header("location:http://moongame.mamac.cn/test?id=2");
+        return view('test');
+    }
     //祝福排行统计
     public function  countwishrank(){
         $common=new common();
@@ -83,14 +93,14 @@ class AdminController extends Controller
         $msg=trim($msg);
         $data="";
         if ($type==1) {
-            $data=DB::table('toinfos')->where('orderNub','=',$msg)
+            $data=DB::table('wishes')->where('orderNub','=',$msg)
             ->orderBy('time','desc')->get();
             if (count($data)==0) {
                 return redirect()->back()->with('errors','没有搜索结果');   
             }
         }
         if ($type==2) {
-            $data=DB::table('toinfos')->where('toNub','=',$msg)
+            $data=DB::table('wishes')->where('toNub','=',$msg)
             ->orderBy('time','desc')->get();
             if (count($data)==0) {
                 return redirect()->back()->with('errors','没有搜索结果');   
@@ -108,8 +118,14 @@ class AdminController extends Controller
             return redirect('/');
         }
         $detail=wish::find($id);
+        $photoPath=$detail->photopath;
+        $arr=explode(',',$photoPath);
         $array=[
             'detail'=>$detail,
+            'photo1'=>$arr[0],
+            'photo2'=>$arr[1],
+            'photo3'=>$arr[2],
+            'photo4'=>$arr[3],
         ];
         return view('admin.receiver.pagelist',$array);
     }
@@ -138,21 +154,21 @@ class AdminController extends Controller
         if ($wish==4) {
             if ($time==1) {
                 if ($state==1) {//全祝福类型，全时间，全状态筛选
-                    $data=DB::table('toinfos')
+                    $data=DB::table('wishes')
                         ->orderBy('time','desc')->get();
                 }else{//全祝福类型，全时间，状态有条件筛选
-                    $data=DB::table('toinfos')
+                    $data=DB::table('wishes')
                         ->where('state','=',($state-2))
                         ->orderBy('time','desc')->get();
                 }
                 
             }else{
                 if ($state==1) {//全祝福类型，时间有条件，全状态筛选
-                   $data=DB::table('toinfos')
+                   $data=DB::table('wishes')
                         ->where('time','=',$time)
                         ->orderBy('time','desc')->get(); 
                 }else{//全祝福类型，时间有条件，状态有条件筛选
-                   $data=DB::table('toinfos')
+                   $data=DB::table('wishes')
                         ->where('time','=',$time)
                         ->where('state','=',($state-2))
                         ->orderBy('time','desc')->get(); 
@@ -164,11 +180,11 @@ class AdminController extends Controller
         else{
             if ($time==1) {
                 if ($state==1) {//祝福有条件，全时间，全状态筛选
-                    $data=DB::table('toinfos')
+                    $data=DB::table('wishes')
                         ->where('type','=',($wish-1))
                         ->orderBy('time','desc')->get();
                 }else{//祝福有条件，全时间，状态有条件筛选
-                    $data=DB::table('toinfos')
+                    $data=DB::table('wishes')
                         ->where('type','=',($wish-1))
                         ->where('state','=',($state-2))
                         ->orderBy('time','desc')->get();
@@ -176,12 +192,12 @@ class AdminController extends Controller
                 
             }else{
                 if ($state==1) {//祝福有条件，时间有条件，全状态筛选
-                   $data=DB::table('toinfos')
+                   $data=DB::table('wishes')
                         ->where('type','=',($wish-1))
                         ->where('time','=',$time)
                         ->orderBy('time','desc')->get(); 
                 }else{//祝福有条件，时间有条件，状态有条件筛选
-                   $data=DB::table('toinfos')
+                   $data=DB::table('wishes')
                         ->where('type','=',($wish-1))
                         ->where('time','=',$time)
                         ->where('state','=',($state-2))
@@ -206,6 +222,16 @@ class AdminController extends Controller
             'state'=>$state,
         ];
         return view('admin.receiver.list',$array);
+    }
+
+    //设置祝福是否公开
+    public function wishset($wishId){
+        $isopen=Request::input('wishset');
+        $wish=wish::find($wishId);
+        $wish->isopen=$isopen;
+        $wish->save();
+        return redirect('admin/receiver/pagelist/'.$wishId);
+
     }
 
     //送礼端信息搜索

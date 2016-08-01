@@ -30,12 +30,35 @@ Route::group(['middleware' => ['web']], function () {
     //
     Route::get('/', 'AdminController@login');
     Route::post('/index', 'AdminController@loginDeal');
+    Route::get('/test', 'AdminController@test');
     
 });
 
 Route::group(['middleware' => ['web'],'prefix'=>'weixin'], function () {
-    //
-    
+    //获取验证码
+    Route::get('/phoneTest', 'Weixin\FromController@phoneTest');
+    //验证码验证
+    Route::get('/vadliate', 'Weixin\FromController@validateFun');
+    //获取祝福列表
+    Route::get('/getLists', 'Weixin\FromController@getLists');
+    //获取祝福详情
+    Route::get('/getDetail', 'Weixin\FromController@getDetail');
+    //获取祝福排行
+    Route::get('/link', 'Weixin\FromController@link');
+    //发起祝福
+    Route::get('/createWish', 'Weixin\FromController@createWish');
+    //验证签名
+    Route::get('/getSignPackage', 'Weixin\FromController@getSignPackage'); 
+    //网页授权   
+    Route::get('/auth', 'Weixin\FromController@auth');
+    //用户点赞，改变船的状态
+    Route::get('/comeFun', 'Weixin\FromController@comeFun');
+    //小船起航
+    Route::get('/sail', 'Weixin\FromController@sail');
+    //判断该用户是否可以点赞
+    Route::get('/isCome', 'Weixin\FromController@isCome');
+
+       
 });
 
 Route::group(['middleware' => ['web'],'prefix'=>'admin'], function () {
@@ -58,10 +81,10 @@ Route::group(['middleware' => ['web'],'prefix'=>'admin'], function () {
     Route::post('/receiver/list','AdminController@receivelist');
     Route::get('receiver/search','AdminController@receivesearch');
     Route::post('receiver/search','AdminController@receivesearchFun');
+    Route::post('receiver/wishset/{id}','AdminController@wishset');
     
 
-    //统计模块
-    Route::get('/count/flow','AdminController@countflow');
+    //排行模块
     Route::get('count/wishrank','AdminController@countwishrank');
 
     //列表详情页

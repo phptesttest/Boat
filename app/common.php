@@ -6,8 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use App\PHPExcel_IOFactory; 
 use Excel;
 use App\frominfo;
+use App\token;
+use App\come;
 use Redirect;
 use Session;
+use DB;
 use PHPExcel_Shared_Date;
 
 class common extends Model
@@ -149,4 +152,263 @@ class common extends Model
 		}
 		return 1;
 	}
+
+	//从微信服务器下载用户上传的照片到本地服务器，并返回存储路径
+	public function downloadImage($medieId){
+		$token=$this->getToken();
+		$url='http://file.api.weixin.qq.com/cgi-bin/media/get?access_token='.$token.'&media_id='.$medieId.'';
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_HEADER, 0);    
+		curl_setopt($ch, CURLOPT_NOBODY, 0);    //对body进行输出。
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		$package = curl_exec($ch);
+		$httpinfo = curl_getinfo($ch);
+		curl_close($ch);
+		$media = array_merge(array('mediaBody' => $package), $httpinfo);
+		//求出文件格式
+		preg_match('/\w\/(\w+)/i', $media["content_type"], $extmatches);
+		$fileExt = $extmatches[1];
+		$filename = time().rand(100,999).".{$fileExt}";
+		$dirname =rtrim(app_path(),'/app').'/public/images/';
+		if(!file_exists($dirname)){
+		    mkdir($dirname,0777,true);
+		}
+		file_put_contents($dirname.$filename,$media['mediaBody']);
+		return $filename;
+	}
+
+	//从微信服务器下载用户上传的语音到本地服务器，并返回存储路径
+	public function downloadVoice($medieId){
+		$token=$this->getToken();
+		$url='http://file.api.weixin.qq.com/cgi-bin/media/get?access_token='.$token.'&media_id='.$medieId.'';
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_HEADER, 0);    
+		curl_setopt($ch, CURLOPT_NOBODY, 0);    //对body进行输出。
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		$package = curl_exec($ch);
+		$httpinfo = curl_getinfo($ch);
+		curl_close($ch);
+		$media = array_merge(array('mediaBody' => $package), $httpinfo);
+		//求出文件格式
+		preg_match('/\w\/(\w+)/i', $media["content_type"], $extmatches);
+		$fileExt = $extmatches[1];
+		$filename = time().rand(100,999).".{$fileExt}";
+		$dirname =rtrim(app_path(),'/app').'/public/voices/';
+		if(!file_exists($dirname)){
+		    mkdir($dirname,0777,true);
+		}
+		file_put_contents($dirname.$filename,$media['mediaBody']);
+		return $filename;
+	}
+
+	//获取access_token
+	public function getToken(){
+		date_default_timezone_set('PRC');
+		$tokens=DB::table('tokens')->orderBy('time','desc')->get();
+		$token="";
+		if (count($tokens)==0) {
+			$openid='wx079deb492ee1955c';
+			$secret='41ca99a03cf2b5f4a2a91d5df2cfb39b';
+			$url='https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid='.$openid.'&secret='.$secret;
+			$tokenObj=json_decode(file_get_contents($url));
+			$token=$tokenObj->access_token;
+			$tokenObj=new token();			
+			$tokenObj->token=$token;
+			$tokenObj->time=time();
+			$tokenObj->save();
+		}
+		else{
+			$id=$tokens[0]->id;
+			$tokenObj=token::find($id);
+			if ((time()-$tokenObj->time)>90*60) {
+				$openid='wx079deb492ee1955c';
+				$secret='41ca99a03cf2b5f4a2a91d5df2cfb39b';
+				$url='https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid='.$openid.'&secret='.$secret;
+				$tokenO=json_decode(file_get_contents($url));
+				$token=$tokenO->access_token;
+				$tokenObj->token=$token;
+				$tokenObj->time=time();
+				$tokenObj->save();
+			}
+			else{
+				$token=$tokenObj->token;
+			}
+		}
+		return $token;
+	}
+
+	//获取jsApiTicket
+	public function getJsApiTicket(){
+		/*$accessToken ='8U8WUjmq3ILmY0g5_DmLv2emEGfJrT03tea0Hor-NvE9-r_TdiMXnTvrtfZdeT7zUxxxbU7ZmXHP7TyOWDJEaKgNIw9kD7dLvlSGap3HYDTmSnHR13z-aTPp3E0RvkHlNDAeAJAHXU';
+        $url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?type=jsapi&access_token=".$accessToken;
+        $res = json_decode($this->httpGet($url));
+        $ticket = $res->ticket;*/
+		date_default_timezone_set('PRC');
+		$tickets=DB::table('tickets')->orderBy('time','desc')->get();
+		$ticket="";
+		if (count($tickets)==0) {
+			$common=new common();
+	        $accessToken = $common->getToken();
+	        $url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?type=jsapi&access_token=".$accessToken;
+	        $res = json_decode($this->httpGet($url));
+	        $ticket = $res->ticket;
+	        $newTicket=new ticket();
+	        $newTicket->tiket=$ticket;
+	        $newTicket->time=time();
+	        $newTicket->save();
+		}
+		else{
+			$id=$tickets[0]->id;
+			$ticketObj=ticket::find($id);
+			if ((time()-$ticketObj->time)>90*60) {
+				$common=new common();
+		        $accessToken = $common->getToken();
+		        $url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?type=jsapi&access_token=".$accessToken;
+		        $res = json_decode($this->httpGet($url));
+		        $ticket = $res->ticket;
+		        $ticketObj->tiket=$ticket;
+		        $ticketObj->time=time();
+		        $ticketObj->save();
+			}
+			else{
+				$ticket=$ticketObj->tiket;
+			}
+		}
+		
+       return $ticket;
+	}
+	private function httpGet($url) {
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 500);
+        curl_setopt($curl, CURLOPT_URL, $url);
+
+        $res = curl_exec($curl);
+        curl_close($curl);
+
+        return $res;
+    }
+
+	//判断该用户是否有点赞机会用户点赞
+	//errcode 为1表示不可以点赞，errcode为0表示可以点赞
+	public function isCome($openid){
+		date_default_timezone_set('PRC');
+		$res=DB::table('comes')->where('openid','=',$openid)->orderBy('day','desc')->get();
+		$errcode="";
+		if (count($res)==0) {
+			$new=new come();
+			$new->openid=$openid;
+			$new->day=date("Y-m-d");
+			$new->save();
+			$errcode=0;
+		}
+		else{
+			if ($res[0]->day!=date("Y-m-d")) {
+				$update=come::find($res[0]->id);
+				$update->day=date("Y-m-d");
+				$update->save();
+				$errcode=0;
+			}
+			else{
+				$errcode=1;
+			}
+		}
+		return $errcode;
+	}
+
+	//处理船的状态的改变
+	public function changeState($wishId){
+		date_default_timezone_set('PRC');
+		$wish=wish::find($wishId);
+		$updateStamp=$wish->updated;
+		//根据船当前状态和没有点赞的天数改变船的状态
+		switch ($wish->state) {
+			case '1':
+				if ((time()-$updateStamp)>15*24*3600) {
+					$wish->state=5;
+				}
+				else if ((time()-$updateStamp)>7*24*3600) {
+					$wish->state=3;
+				}
+				else if ((time()-$updateStamp)>3*24*3600) {
+					$wish->state=2;
+				}
+				break;
+			
+			case '2':
+				if ((time()-$updateStamp)>15*24*3600) {
+					$wish->state=5;
+				}
+				else if ((time()-$updateStamp)>7*24*3600) {
+					$wish->state=3;
+				}
+				break;
+
+			case '3':
+				if ((time()-$updateStamp)>15*24*3600) {
+					$wish->state=5;
+				}
+				break;
+		}
+		$state=$wish->state;
+		$wish->save();
+		return $state;
+	}
+
+	//改变船的等级
+	public function changeLevel($wishId,$distance,$type){
+		$number=0;
+		$level=1;
+		if ($type==1) {//友谊的小船
+			$number=$distance;		
+		}
+		if ($type==2) {//爱情的巨轮
+			$number=$distance/10;
+		}
+		if ($number>=1314) {
+			$wish=wish::find($wishId);
+			$wish->level=5;
+			$wish->save();
+			$level=5;
+		}
+		else if ($number>=888) {
+			$wish=wish::find($wishId);
+			$wish->level=4;
+			$wish->save();
+			$level=4;
+		}
+		else if ($number>=666) {
+			$wish=wish::find($wishId);
+			$wish->level=3;
+			$wish->save();
+			$level=3;
+		}
+		else if ($number>=233) {
+			$wish=wish::find($wishId);
+			$wish->level=2;
+			$wish->save();
+			$level=2;
+		}
+		return $level;
+	}
+	//判断点赞数是否可以修复船的状态，并处理
+	public function isFix($comes,$wishId){
+		date_default_timezone_set('PRC');
+		if ($comes>=50) {
+			$wish=wish::find($wishId);
+			$state=$wish->state;
+			switch ($state) {
+				case '2':
+					$wish->state=1;
+					$wish->save();
+					break;
+				
+				case '3':
+					$wish->state=2;
+					$wish->save();
+					break;
+			}
+		}
+	}
+
 }

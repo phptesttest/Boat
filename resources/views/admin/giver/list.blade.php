@@ -6,6 +6,7 @@ box-shadow:3px 3px #cccc;
 }
 @endsection
 @section('content')
+
 <div class="container">
     <div class="col-xs-12 col-sm-12">
         <div class="panel">
@@ -18,7 +19,7 @@ box-shadow:3px 3px #cccc;
                 <table class="table">
                     <tr>
                         <td>下单时间</td>
-                        <td><input type="date" name='time'  value="0"></td>
+                        <td><input id="d121" name="time" placeholder="点击这里可弹出日历选择" type="text" onfocus="WdatePicker({isShowWeek:true})"/></td>
                     </tr>
                     <tr>
                         <td>祝福的类型</td>

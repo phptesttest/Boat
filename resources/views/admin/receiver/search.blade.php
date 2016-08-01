@@ -111,7 +111,7 @@ box-shadow:3px 3px #cccc;
                                 }
                              ?>
                             </td>
-                            <td><a href="{{ asset('/receiver/pagelist')}}/{{ $dd->wishid}}">查看详情</a></td>
+                            <td><a href="{{ asset('/admin/receiver/pagelist')}}/{{ $dd->id}}">查看详情</a></td>
                         </tr>              
                 		<?php  } ?>
 	                   </table>

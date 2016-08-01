@@ -18,7 +18,7 @@ box-shadow:3px 3px #cccc;
                 <table class="table">
                     <tr>
                         <td>获得祝福的时间</td>
-                        <td><input type="date" name='time'  value="0" ></td>
+                        <td><input id="d121" name="time" placeholder="点击这里可弹出日历选择" type="text" onfocus="WdatePicker({isShowWeek:true})"/></td>
                     </tr>
                     <tr>
                         <td>祝福的类型</td>
@@ -103,7 +103,7 @@ box-shadow:3px 3px #cccc;
                                 }
                              ?>
                             </td>
-                            <td><a href="{{ asset('/admin/receiver/pagelist')}}/{{ $dd->wishid}}">查看详情</a></td>
+                            <td><a href="{{ asset('/admin/receiver/pagelist')}}/{{ $dd->id}}">查看详情</a></td>
                         </tr>              
                     <?php } } ?>
                 </table>

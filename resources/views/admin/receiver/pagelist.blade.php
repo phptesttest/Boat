@@ -106,7 +106,7 @@
                     </tr>
                     <tr>
                         <td>照片</td>
-                        <td></td>
+                        <td><img style="width:100px;height:100px;" src="{{ asset('/images')}}/{{ $photo1}}"><img style="width:100px;height:100px;" src="{{ asset('/images')}}/{{ $photo2}}"><img style="width:100px;height:100px;" src="{{ asset('/images')}}/{{ $photo3}}"><img style="width:100px;height:100px;" src="{{ asset('/images')}}/{{ $photo4}}"></td>
                     </tr>
                     <tr>
                         <td>语音</td>
@@ -114,9 +114,12 @@
                     </tr>
                 </table>
             <label>设置信息公开：</label>
-            <input type="radio" name="wishset" value="0" checked="checked" />不公开
-            <input type="radio" name="wishset" value="1" />公开
-            <input type="button" name="setwish" value="设定" class="btn btn-info">
+            <form class="form-horizontal" role="form" method="POST" action="{{ asset('/admin/receiver/wishset') }}/{{ $detail->id}}">
+            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            <input type="radio" name="wishset" value="0" <?php if ($detail->isopen==0) { echo "checked";} ?> />不公开
+            <input type="radio" name="wishset" value="1" <?php if ($detail->isopen==1) { echo "checked";} ?> />公开
+            <input type="submit" value="设定" class="btn btn-info">
+            </form>
             </div>
         </div>
 

@@ -10,6 +10,7 @@
 
     <link href="//cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
     <script src="//cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+    <script language="javascript" type="text/javascript" src="{{ asset('/js/WdatePicker.js')}}"></script>
     <script src="//cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
     <!-- Fonts -->
@@ -72,11 +73,9 @@
                     </ul>
                 </li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">统计端模块<span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">排行榜<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="/admin/count/wishrank">祝福排行统计</a></li>
-                        <li><a href="/admin/count/flow">流量统计</a></li>
-                        <li><a href="#">统计时效</a></li>
                     </ul>
                 </li>
                 <li><a href="/admin/logout">退出</a></li>
