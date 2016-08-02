@@ -24,6 +24,7 @@
                        <tr>
                            <th>账号</th>
                            <th>角色</th>
+                           <th>渠道编码</th>
                            <th colspan="3">操作</th>
                        </tr>
                         @foreach($users as $user)

@@ -56,7 +56,7 @@
                         </div>
                         <div class="form-group">
                             <label for="note">备注</label>
-                            <input type="text" class="form-control" id="note" name="note">
+                            <input type="text" class="form-control" id="note" name="note" value="{{$users->note}}">
                         </div>
                         <input type="submit" class="btn btn-info" value="修改">
 

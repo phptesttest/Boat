@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFrominfosTable extends Migration
+class CreateQrcodesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,11 @@ class CreateFrominfosTable extends Migration
     public function up()
     {
         //
-        Schema::create('frominfos', function (Blueprint $table) {
+        Schema::create('qrcodes', function(Blueprint $table){
             $table->increments('id');
-            $table->string('orderNub');
             $table->string('coding');
-            $table->string('fromNub');
-            $table->string('time');
-            $table->string('number');
-            $table->integer('type')->default('0');
+            $table->string('path');
+            $table->string('name');
             $table->rememberToken();
             $table->timestamps();
         });
@@ -34,6 +31,6 @@ class CreateFrominfosTable extends Migration
     public function down()
     {
         //
-        Schema::drop('frominfos');
+        Schema::drop('qrcodes');
     }
 }

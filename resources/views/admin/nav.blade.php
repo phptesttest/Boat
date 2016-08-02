@@ -57,6 +57,7 @@
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
+                @if( Session::get('super') )
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">账号管理模块<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
@@ -64,6 +65,7 @@
                         <li><a href="/admin/useradd">新增账号</a></li>
                     </ul>
                 </li>
+                @endif
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">送礼端模块<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
@@ -72,6 +74,7 @@
                         <li><a href="/admin/giver/list">送礼信息列表/信息帅选/导出</a></li>
                     </ul>
                 </li>
+                @if( Session::get('super') )
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">获赠端模块<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
@@ -85,6 +88,7 @@
                         <li><a href="/admin/count/wishrank">祝福排行统计</a></li>
                     </ul>
                 </li>
+                @endif
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">二维码模块<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
