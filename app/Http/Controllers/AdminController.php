@@ -351,9 +351,8 @@ class AdminController extends Controller
     }
     
     public function import(){
-        if($this->checkLogin()==0){
-            return redirect('/');
-        };
+        $this->checkLogin();
+
         return view('admin.giver.import');        
     }
 
