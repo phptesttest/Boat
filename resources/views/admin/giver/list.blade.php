@@ -42,6 +42,7 @@ box-shadow:3px 3px #cccc;
             <div class="panel-body">
                 <table class="table">
                     <tr>
+                        <th>渠道编码</th>
                         <th>订单编号</th>
                         <th>送礼方手机号码</th>
                         <th>下单时间</th>
@@ -53,6 +54,7 @@ box-shadow:3px 3px #cccc;
                     <?php }else{ ?> 
                     <?php foreach ($data as $dd) { ?>
                         <tr>
+                            <td>{{ $dd->coding}}</td>
                             <td>{{ $dd->orderNub}}</td>
                             <td>{{ $dd->fromNub}}</td>
                             <td>{{ $dd->time}}</td>

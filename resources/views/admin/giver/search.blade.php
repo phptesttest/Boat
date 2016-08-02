@@ -28,6 +28,7 @@ box-shadow:3px 3px #cccc;
 					<select name="type">
 						<option value="1" selected="selected">订单编号</option>
 						<option value="2">送礼方手机号码</option>
+                        <option value="3">编码渠道</option>
 					</select>
 					</td>
 					<td><input type="text" name="msg"></td>
@@ -60,6 +61,7 @@ box-shadow:3px 3px #cccc;
                         <table class="table">
 
                             <tr>
+                                <th>渠道编码</th>
                                 <th>订单编号</th>
                                 <th>送礼方手机号码</th>
                                 <th>下单时间</th>
@@ -69,6 +71,7 @@ box-shadow:3px 3px #cccc;
                             <?php foreach ($data as $dd) {
                             ?>
                             <tr>
+                                <td>{{ $dd->coding}}</td>
                                 <td>{{ $dd->orderNub}}</td>
                                 <td>{{ $dd->fromNub}}</td>
                                 <td>{{ $dd->time}}</td>

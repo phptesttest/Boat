@@ -245,7 +245,7 @@ class AdminController extends Controller
 
     //送礼端信息搜索的处理
     public function givesearchFun(){
-        $type=Request::input('type');//1为按订单编号搜索，2为按手机号码搜索
+        $type=Request::input('type');//1为按订单编号搜索，2为按手机号码搜索，3为渠道编码
         $msg=Request::input('msg');
         $msg=trim($msg);
         $data="";
@@ -263,8 +263,16 @@ class AdminController extends Controller
                 return redirect()->back()->with('errors','没有搜索结果');   
             }
         }
+        if ($type==3) {
+            $data=DB::table('frominfos')->where('coding','=',$msg)
+            ->orderBy('time','desc')->get();
+            if (count($data)==0) {
+                return redirect()->back()->with('errors','没有搜索结果');   
+            }  
+        }
         $array=[
             'data'=>$data,
+            
         ];
         return view('admin.giver.search',$array);
 
@@ -280,6 +288,7 @@ class AdminController extends Controller
         $time=1;
         $wish=4;
         $data="";
+        $coding="";
         if (Request::input('time')) {
             $time=Request::input('time');//1表示全部时间
         }
@@ -292,11 +301,11 @@ class AdminController extends Controller
             //对时间筛选
             if ($time==1) {
                 $data=DB::table('frominfos')
-                ->orderBy('time','desc')->get();
+                ->orderBy('coding','ASC')->get();
             }else{
                 $data=DB::table('frominfos')
                 ->where('time','=',$time)
-                ->orderBy('time','desc')->get();
+                ->orderBy('coding','ASC')->get();
             }
            
         }       
@@ -304,12 +313,12 @@ class AdminController extends Controller
             if ($time==1) {
                 $data=DB::table('frominfos')
                 ->where('type','=',($wish-1))
-                ->orderBy('time','desc')->get();
+                ->orderBy('coding','ASC')->get();
             }else{
                 $data=DB::table('frominfos')
                 ->where('type','=',($wish-1))
                 ->where('time','=',$time)
-                ->orderBy('time','desc')->get();
+                ->orderBy('coding','ASC')->get();
             }
             
         }

@@ -82,6 +82,16 @@ Route::group(['middleware' => ['web'],'prefix'=>'admin'], function () {
     Route::get('receiver/search','AdminController@receivesearch');
     Route::post('receiver/search','AdminController@receivesearchFun');
     Route::post('receiver/wishset/{id}','AdminController@wishset');
+
+    //二维码模块
+    Route::get('/qrcode/manage','QrcodeController@manage');
+    Route::post('/qrcode/upload','QrcodeController@upload');
+    Route::get('/qrcode/update/{id}','QrcodeController@update');
+    Route::post('/qrcode/update/{id}','QrcodeController@updateFun');
+    Route::get('/qrcode/delete/{id}','QrcodeController@manage');
+    Route::get('/qrcode/search','QrcodeController@search');
+    Route::post('/qrcode/search','QrcodeController@search');
+    
     
 
     //排行模块
