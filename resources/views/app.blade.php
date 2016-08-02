@@ -7,7 +7,7 @@
 	<title>友谊的小船</title>
 
 	<link href="{{ asset('/css/app.css') }}" rel="stylesheet">
-
+	<link href="{{ asset('/css/bootstrap.css') }}" rel="stylesheet">
 	<!-- Fonts -->
 	
 
@@ -22,12 +22,6 @@
 	<nav class="navbar navbar-default">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<!-- <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-					<span class="sr-only">Toggle Navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button> -->
 				<a style="font-size:20px" class="navbar-brand" href="#">后台管理系统</a>
 			</div>
 
@@ -55,7 +49,7 @@
 	@yield('content')
 
 	<!-- Scripts -->
-	<script src="http://cdn.bootcss.com/jquery/2.1.3/jquery.min.js"></script>
-	<script src="http://cdn.bootcss.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+	<script src="{{asset('/js/jquery-1.5.2.min.js')}}" type="text/javascript"></script>
+	<script src="{{asset('/js/bootstrap2.1.1.min.js')}}" type="text/javascript"></script>
 </body>
 </html>

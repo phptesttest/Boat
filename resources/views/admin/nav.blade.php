@@ -52,11 +52,18 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" >后台管理系统</a>
+            <a class="navbar-brand" href="/admin/index" >后台管理系统</a>
         </div>
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">账号管理模块<span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="/admin/userlist">账号列表</a></li>
+                        <li><a href="/admin/useradd">新增账号</a></li>
+                    </ul>
+                </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">送礼端模块<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">

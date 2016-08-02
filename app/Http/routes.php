@@ -62,6 +62,16 @@ Route::group(['middleware' => ['web'],'prefix'=>'weixin'], function () {
 });
 
 Route::group(['middleware' => ['web'],'prefix'=>'admin'], function () {
+    //账号管理模块
+    Route::get('/userlist', 'UserController@userList');
+    Route::get('/useradd', 'UserController@userAdd');
+    Route::post('/useradd','UserController@userAddDeal');
+    Route::get('/useredit/{id}','UserController@userEdit');
+    Route::post('/useredit/{id}','UserController@userEditDeal');
+    Route::get('/userdisable/{id}','UserController@userDisable');
+    Route::get('/userenable/{id}','UserController@userEnable');
+    Route::get('/userdelete/{id}','UserController@userDelete');
+
     //
     Route::get('/import', 'AdminController@import');
     Route::get('/giveExport/{flag}', 'AdminController@giveExportFun');

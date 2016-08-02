@@ -2,19 +2,23 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Http\Requests;
 use Request;
-use App\User;
 use App\wish;
 use Session;
 use Redirect;
 use App\common;
+use App\User;
 use DB;
 
 class AdminController extends Controller
 {
-
+    //检验用户是否登录
+    public function checkLogin(){
+        if (!Session::get('user')) {
+            return redirect('/');
+        }
+    }
 
     //测试
     public function test(){
@@ -27,10 +31,7 @@ class AdminController extends Controller
     }
     //祝福排行统计
     public function  countwishrank(){
-        $common=new common();
-        if($common->checkLogin()==0){
-            return redirect('/');
-        }
+        $this->checkLogin();
         $friends=DB::table('wishes')->where('type','=',1)
         ->select('orderNub','level','toname','fromname','distance','state','id')
         ->orderBy('distance','desc')
@@ -48,18 +49,12 @@ class AdminController extends Controller
 
     //流量统计
     public function countflow(){
-        $common=new common();
-        if($common->checkLogin()==0){
-            return redirect('/');
-        }
+        $this->checkLogin();
         return view('admin.count.flow');
     }
 
     public function receivesearch(){
-        $common=new common();
-        if($common->checkLogin()==0){
-            return redirect('/');
-        }
+        $this->checkLogin();
         $type=Request::input('type');//1为按订单编号搜索，2为按手机号码搜索
         $msg=Request::input('msg');
         $msg=trim($msg);
@@ -113,10 +108,7 @@ class AdminController extends Controller
     }
 
     public function pagedetail($id){
-        $common=new common();
-        if($common->checkLogin()==0){
-            return redirect('/');
-        }
+        $this->checkLogin();
         $detail=wish::find($id);
         $photoPath=$detail->photopath;
         $arr=explode(',',$photoPath);
@@ -132,10 +124,7 @@ class AdminController extends Controller
 
     //获赠端信息列表
     public function receivelist(){
-        $common=new common();
-        if($common->checkLogin()==0){
-            return redirect('/');
-        }
+        $this->checkLogin();
         //默认取出全部记录
         $time=1;
         $state=1;
@@ -236,10 +225,7 @@ class AdminController extends Controller
 
     //送礼端信息搜索
     public function givesearch(){
-        $common=new common();
-        if($common->checkLogin()==0){
-            return redirect('/');
-        }
+        $this->checkLogin();
         return view('admin.giver.search');
     }
 
@@ -272,10 +258,7 @@ class AdminController extends Controller
 
     //送礼端信息搜索,筛选，导出
     public function givelist(){
-        $common=new common();
-        if($common->checkLogin()==0){
-            return redirect('/');
-        }
+        $this->checkLogin();
         //默认取出全部记录
         $time=1;
         $wish=4;
@@ -322,52 +305,44 @@ class AdminController extends Controller
     }
     //后台主页
     public function index(){
-        $common=new common();
-        if($common->checkLogin()==0){
-            return redirect('/');
-        }
+        $this->checkLogin();
         return view('admin.index');
     }
-    //
+    //登陆页面
     public function login(){
     	return view('admin.login');
     }
 
-    //登录处理
+    //登录处理,请不要再添加任何与登陆处理无关的逻辑；
     public function loginDeal(){
-    	$user=User::all();
-    	if (count($user)==0) {
-    		$user=new User();
-    		$user->name='boatfriend';
-    		$user->password='123456';
-    		$user->save();
-    		$user=User::all();
-    		
-    	}
-    	
-    	$username=Request::input('username');
-    	$password=Request::input('password');
-    	if ($username!=$user[0]->name) {
-    		return redirect()->back()->with('errors','账号错误');
-    	}
-    	if ($password!=$user[0]->password) {
-    		return redirect()->back()->with('errors','密码错误');
-    	}
-        Session::put('admin','adminIn');
-        
-        //return view('admin.index'); 
+        $pwdword = Request::input('password');
+        $username = Request::input('username');
+        if($username=="" | $pwdword==""){
+            return redirect()->back()->with('errors','输入不能为空');
+        }
+        $user = DB::table('users')->where('name','=',$username)->where('isable','=','1')->get();
+        if(!count($user)){
+            return redirect()->back()->with('errors','该用户不存在或被禁用');
+        }
+        if( $pwdword != $user[0]->password ){
+            return redirect()->back()->with('errors','你输入的密码有误，请重新输入');
+        }
+        if($user[0]->role == '1' ){  //为超级管理员
+            Session::push('super',true);
+        }
+        Session::put('user',$user[0]);
         return redirect('/admin/index');
     }
 
     public function logout(){
-        Session::forget('admin');
+        Session::forget('user');
+        Session::forget('super');
         Session::flush();
         return redirect('/');
     }
     
     public function import(){
-        $common=new common();
-        if($common->checkLogin()==0){
+        if($this->checkLogin()==0){
             return redirect('/');
         };
         return view('admin.giver.import');        
@@ -375,11 +350,7 @@ class AdminController extends Controller
 
     //将execl文件导入数据库
     public function importFun(){
-        $common=new common();
-        if($common->checkLogin()==0){
-            return redirect('/');
-        }
-
+        $this->checkLogin();
         if (! empty ( $_FILES ['file_stu'] ['name'] )) {
             $tmp_file = $_FILES ['file_stu'] ['tmp_name'];
             $file_types = explode ( ".", $_FILES ['file_stu'] ['name'] );
@@ -417,10 +388,7 @@ class AdminController extends Controller
 
     //将送礼端数据库数据导出到excel
     public function giveExportFun($flag){
-        $common=new common();
-        if($common->checkLogin()==0){
-            return redirect('/');
-        }
+        $this->checkLogin();
         $arr=explode(",",$flag);
         $time=$arr[0];
         $wish=$arr[1];

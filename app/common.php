@@ -145,13 +145,7 @@ class common extends Model
 		})->export('xlsx');
     }
 
-    //检验用户是否登录
-    public function checkLogin(){
-		if (!Session::get('admin')) {
-			return 0;
-		}
-		return 1;
-	}
+
 
 	//从微信服务器下载用户上传的照片到本地服务器，并返回存储路径
 	public function downloadImage($medieId){

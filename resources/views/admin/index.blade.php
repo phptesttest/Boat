@@ -13,18 +13,8 @@
                 <h3 class="panel-title">管理员信息</h3>
             </div>
             <div class="panel-body">
-                <table class="table">
-                    <tr>
-                        <td>亲爱的管理员</td>
-                        <td>欢迎你！！</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>xx天</td>
-                    </tr>
-                    
-                   
-                </table>
+                <h3>亲爱的管理员{{ Session::get('user')->name }}
+                    欢迎你！！</h3>
             </div>
         </div>
     </div>
