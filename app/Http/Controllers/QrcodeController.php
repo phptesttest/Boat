@@ -7,11 +7,19 @@ use App\Http\Requests;
 use Request;
 use App\qrcode;
 use DB;
+use Session;
 
 class QrcodeController extends Controller
 {
     //
+
+    public function checkLogin(){
+        if (!Session::get('user')) {
+            return redirect('/');
+        }
+    }
     public function manage($id=null){
+        $this->checkLogin();
     	if (!is_null($id)) {
     		$qrcode=qrcode::find($id);
     		$path=$qrcode->path;
@@ -22,8 +30,8 @@ class QrcodeController extends Controller
             $qrcode->delete();
     		return redirect()->back()->with('errors','删除成功');
     	}
-    	//$user=Seesion::get('user');
-    	$coding='001';//$user->coding;
+    	$user=Session::get('user');
+    	$coding=$user->coding;
     	$qrcode=DB::table('qrcodes')->where('coding','=',$coding)
     		->get();
     	$data=array(
@@ -34,6 +42,13 @@ class QrcodeController extends Controller
 
     //上传二维码
     public function upload(){
+        $this->checkLogin();
+        $user=Session::get('user');
+        $coding=$user->coding;
+        $codings=DB::table('qrcodes')->where('coding','=',$coding)->get();
+        if (count($codings)>=3) {
+           return redirect()->back()->with('errors','最多只能上传三张验证码'); 
+        }
     	$name=Request::input('name');
     	if (! empty ( $_FILES ['file_stu'] ['name'] )) {
             $tmp_file = $_FILES ['file_stu'] ['tmp_name'];
@@ -59,8 +74,8 @@ class QrcodeController extends Controller
             }
             //将该二维码存入数据库
             $qrcode=new qrcode();
-            //$user=Sessoin::get('user');
-            $coding='001';//$user->coding;
+            $user=Session::get('user');
+            $coding=$user->coding;
             $qrcode->path=$file_name;
             $qrcode->name=$name;
             $qrcode->coding=$coding;
@@ -73,6 +88,7 @@ class QrcodeController extends Controller
     }
 
     public function update($id){
+        $this->checkLogin();
     	$qrcode=qrcode::find($id);
     	$data=array(
     		'qrcode'=>$qrcode,
@@ -119,6 +135,7 @@ class QrcodeController extends Controller
     }
 
     public function search(){
+        $this->checkLogin();
     	$qrcodes=DB::table('qrcodes')->orderBy('coding')
     		->first();
 		$coding=$qrcodes->coding;

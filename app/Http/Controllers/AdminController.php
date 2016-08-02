@@ -357,7 +357,6 @@ class AdminController extends Controller
 
     //将execl文件导入数据库
     public function importFun(){
-        $this->checkLogin();
         if (! empty ( $_FILES ['file_stu'] ['name'] )) {
             $tmp_file = $_FILES ['file_stu'] ['tmp_name'];
             $file_types = explode ( ".", $_FILES ['file_stu'] ['name'] );
@@ -395,7 +394,6 @@ class AdminController extends Controller
 
     //将送礼端数据库数据导出到excel
     public function giveExportFun($flag){
-        $this->checkLogin();
         $arr=explode(",",$flag);
         $time=$arr[0];
         $wish=$arr[1];
