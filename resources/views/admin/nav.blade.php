@@ -85,6 +85,13 @@
                         <li><a href="/admin/count/wishrank">祝福排行统计</a></li>
                     </ul>
                 </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">二维码模块<span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="/admin/qrcode/manage">二维码管理</a></li>
+                        <li><a href="/admin/qrcode/search">二维码筛选</a></li>
+                    </ul>
+                </li>
                 <li><a href="/admin/logout">退出</a></li>
             </ul>
         </div>

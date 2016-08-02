@@ -8,6 +8,7 @@ use Excel;
 use App\frominfo;
 use App\token;
 use App\come;
+use App\sort;
 use Redirect;
 use Session;
 use DB;
@@ -32,7 +33,8 @@ class common extends Model
 								$data=$cell->getValue();//获取单元格数据
 								switch ($j) {
 									case 1:
-										$frominfo->orderNub=$data;
+										$frominfo->coding=sprintf("%03d",$data);
+										$frominfo->orderNub=$this->createOrderNub($data);
 										break;
 									case 2:
 										$frominfo->fromNub=$data;
@@ -47,12 +49,39 @@ class common extends Model
 										break;		
 								}							
 								$j++;
+								
 								$frominfo->save();
 						}
 				}
 			}
     	});		
     }
+
+    //根据渠道编码生成订单编号
+    public function createOrderNub($coding){
+    	$coding=sprintf("%03d",$coding);
+    	$orderNub="";
+    	$codes=DB::table('sorts')->where('coding','=',$coding)
+    		->get();
+    	if (count($codes)==0) {
+    		$newSort=new sort();
+    		$newSort->coding=$coding;
+    		$number=$newSort->number+1;
+    		$number=sprintf("%07d",$number);
+    		$newSort->number=$number;
+    		$orderNub=$coding.$number;
+    		$newSort->save();
+    	}else{
+    		$code=sort::find($codes[0]->id);
+    		$number=$code->number+1;
+    		$number=sprintf("%07d",$number);
+    		$code->number=$number;
+    		$orderNub=$coding.$number;
+    		$code->save();
+    	}
+    	return $orderNub;
+    }
+
     //送礼端将数据库数据导出excel
     public function giveExportExcel($res){
     	header("content-type:text/html;charset:utf8");
