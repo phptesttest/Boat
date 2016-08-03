@@ -38,8 +38,13 @@ class UserCOntroller extends Controller
         $repassword = Request::input('repassword');
         $role = Request::input('role');
         $note = Request::input('note');
-        if($username==""| $password==""| $repassword=="" |$coding==""){
+        if($username==""| $password==""| $repassword==""){
             return redirect()->back()->with('errors','输入不能为空');
+        }
+        if(!$role){
+            if($coding==""){
+                return redirect()->back()->with('errors','渠道编码不能为空');
+            }
         }
         $result = DB::table('users')->where( 'name','=',$username )->get();
         if(count($result)){
@@ -78,10 +83,15 @@ class UserCOntroller extends Controller
             $coding = Request::input('coding');
             $note = Request::input('note');
 
-            if($username==""| $oldpassword==""| $newpassword==""| $repassword==""| $coding==""){
+            if($username==""| $oldpassword==""| $newpassword==""| $repassword==""){
                 return redirect()->back()->with('errors','修改信息不能为空');
             }
             $user = User::find($id);
+            if(!$user->role){
+                if($coding==""){
+                    return redirect()->back()->with('errors','渠道编码不能为空');
+                }
+            }
             if($oldpassword != $user->password ){
                 return redirect()->back()->with('errors','原密码不正确');
             }

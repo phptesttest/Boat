@@ -38,10 +38,12 @@
                             <label for="name">用户账号</label>
                             <input type="text" class="form-control" id="name" name="name" value="{{$users->name}}">
                         </div>
+                        @if( !$users->role)
                         <div class="form-group">
                             <label for="coding">渠道编码</label>
                             <input type="text" class="form-control" id="coding" name="coding" value="{{$users->coding}}">
                         </div>
+                        @endif
                         <div class="form-group">
                             <label for="password">原密码</label>
                             <input type="password" class="form-control" id="password" name="oldpassword">
